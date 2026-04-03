@@ -129,7 +129,7 @@ The system uses three main tables:
 
   * Stores financial records linked to users and categories
 
-### 🔗 Relationships
+### Relationships
 
 * One User → Many Transactions
 * One Category → Many Transactions
@@ -165,7 +165,7 @@ JWT_SECRET=#####
 ##  Run Locally
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Chandu5342/FinancialBE.git
 cd backend
 npm install
 npm run dev
