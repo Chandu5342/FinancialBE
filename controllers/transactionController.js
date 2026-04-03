@@ -106,7 +106,7 @@ export const deleteTransaction = async (req, res) => {
     if (!transaction) {
       return res.status(404).json({ message: 'Transaction not found' });
     }
-
+    console.log(transaction.userId, req.user.id);   
     if (transaction.userId !== req.user.id) {
       return res.status(403).json({ message: 'Not allowed' });
     }
