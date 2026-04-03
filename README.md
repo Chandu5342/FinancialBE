@@ -1,67 +1,60 @@
-# Hospital Management System Backend
+# Finance Dashboard Backend
 
-This repository contains the backend API for a Hospital Management System built with Node.js, Express, MongoDB, and JWT authentication.
+This repository is a Finance Dashboard backend API built with Node.js, Express, PostgreSQL (Sequelize), JWT authentication, and Swagger API docs.
 
 ## Features
 
 - User authentication
-  - Signup / Login with JWT
-  - Role-based access control (admin, doctor, reception, lab)
-- Admin module
-  - Add, update, list, remove users
-  - Full + paginated user list with filters
-  - Dashboard statistics (patients, doctors, reception, lab)
-- Reception management
-  - Add patients
-  - Assign doctors
-  - Fetch patient details (full + paginated + filters)
-  - Billing (create bills, fetch bills, pay bills)
-- Doctor module
-  - Fetch assigned patients
-  - Add treatment records
-  - View patient history (full + paginated + filters)
-  - Access lab results for patients
-- Lab module
-  - Upload lab results
-  - Fetch lab results (full + paginated + filters)
-- File uploads
-  - Serve uploaded files from `/uploads`
-- Middleware
-  - JWT authentication
-  - Role-based authorization
+  - Register (sign-up) and login with JWT
+- Role-based access control
+  - `admin`, `analyst` (as defined by `authorizeRoles` use)
+- Categories management
+  - Create category (admin only)
+  - List categories (all authenticated users)
+- Transactions management
+  - Create transaction (analyst, admin)
+  - Get transactions (authenticated users, with filtering by user+date)
+  - Update transaction (analyst, admin)
+  - Delete transaction (admin)
+- Dashboard metrics
+  - Summary and monthly trends (authenticated users)
+- Central error handling and request validation (zod)
 
 ## Folder structure
 
 ```
 backend/
-│── controllers/    # API business logic
-│── middleware/     # auth and role-based middleware
-│── models/         # database models
-│── routes/         # API endpoints
-│── uploads/        # uploaded files
+│── config/         # DB connection and config
+│── controllers/    # Request handlers
+│── middleware/     # Auth, role middleware, validation, errors
+│── models/         # Sequelize models
+│── routes/         # API routes
+│── utils/          # token generation, swagger setup
 │── app.js          # Express app setup
-│── server.js       # Server entry point
+│── server.js       # Server entrypoint
 │── .env            # Environment variables
 ``` 
 
 ## Tech Stack
 
 - Node.js + Express
-- MongoDB (uses mongoose in current codebase)
+- PostgreSQL via Sequelize
 - JWT Authentication
-- bcrypt.js for password hashing
-- File storage: local `/uploads` folder via Multer
-- dotenv for configuration
+- bcrypt for password hashing
+- Zod for validation
+- Swagger UI for API docs
+- nodemon for development
 
 ## Environment variables
 
 Create a `.env` file in `backend/` with values like:
 
 ```
-DB_HOST=sql12.freesqldatabase.com
-DB_USER=sql12800854
-DB_PASSWORD=87KppxHxsi
-DB_NAME=sql12800854
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
 PORT=5000
 JWT_SECRET=secret
 ```
@@ -69,7 +62,7 @@ JWT_SECRET=secret
 ## Run locally
 
 ```bash
-git clone https://github.com/Chandu5342/HospitalMangamentBackend.git
+git clone <your-repo-url>
 cd backend
 npm install
 npm run dev
@@ -81,57 +74,40 @@ Server will run on: `http://localhost:5000`
 
 ### Auth
 
-- `POST /api/auth/signup` - Register a new user (all roles)
-- `POST /api/auth/login` - Login user, returns JWT (all roles)
+- `POST /api/auth/register` - Register a new user
+  - body: `{ name, email, password, role, isActive }`
+- `POST /api/auth/login` - Login user
+  - body: `{ email, password }`
 
-### Admin routes
+### Categories
 
-- `POST /api/admin/users` - Add new user (admin)
-- `GET /api/admin/users` - List users (admin, reception)
-- `PUT /api/admin/users/:userId` - Update user info (admin)
-- `DELETE /api/admin/users/:userId` - Delete user (admin)
-- `GET /api/admin/dashboard` - Dashboard stats (admin, reception)
+- `POST /api/categories` - Add new category (admin only)
+  - header: `Authorization: Bearer <token>`
+  - body: `{ name }`
+- `GET /api/categories` - List categories (authenticated users)
 
-### Patient routes
+### Transactions
 
-- `GET /api/patients` - Fetch all patients (filters supported) (reception, doctor, admin)
-- `POST /api/patients` - Add a new patient (reception, admin)
-- `PUT /api/patients/assign` - Assign doctor to patient (reception, admin)
+- `POST /api/transactions` - Create transaction (analyst, admin)
+  - body: `{ type: 'income'|'expense', amount, categoryId, date?, note? }`
+- `GET /api/transactions` - Get transactions (authenticated user)
+  - supports query params: `page`, `limit`, `startDate`, `endDate`, `type`, `category`, `search`
+- `PUT /api/transactions/:id` - Update transaction (analyst, admin)
+- `DELETE /api/transactions/:id` - Delete transaction (admin)
 
-### Doctor routes
+### Dashboard
 
-- `GET /api/doctor/patients` - Get assigned patients (doctor)
-- `POST /api/doctor/treatment` - Add treatment record (doctor)
-- `GET /api/doctor/history/:patientId` - Full patient history (doctor)
-- `GET /api/doctor/history/:patientId/paginated` - Paginated history (doctor)
-- `GET /api/doctor/lab-results/:patientId` - Lab results for patient (doctor)
+- `GET /api/dashboard/summary` - Get cumulative income/expense summary
+- `GET /api/dashboard/trends` - Get monthly income/expense trends
 
-### Billing routes
+## API documentation
 
-- `POST /api/billings/:patientId` - Create a bill (reception, admin)
-- `GET /api/billings/:patientId` - Fetch bills for patient (reception, doctor, admin)
-- `POST /api/billings/:patientId/:billId/pay` - Pay a bill (reception, admin)
+Open `http://localhost:5000/api-docs` for Swagger UI.
 
-### Lab routes
+## Notes
 
-- `POST /api/lab/upload` - Upload lab report (lab)
-- `GET /api/lab/:patientId` - Fetch lab results (lab, doctor, admin)
+- The backend uses PostgreSQL and the Sequelize ORM.
+- Role checks are enforced in `middleware/roleMiddleware.js`.
+- JWT auth is enforced in `middleware/authMiddleware.js`.
+- Validation rules are in `validations/*` with Zod schemas.
 
-## File uploads
-
-Uploaded files are served via:
-
-```
-http://localhost:5000/uploads/<file-name>
-```
-
-## Live backend
-
-Deployment platform: Render (as per your project note)
-
-## Test accounts
-
-- Admin: `admin@gmail.com` / `123456`
-- Doctor: `doctor@gmail.com` / `123456`
-- Reception: `reception@gmail.com` / `123456`
-- Lab: `lab@gmail.com` / `123456`
