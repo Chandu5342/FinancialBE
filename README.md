@@ -183,6 +183,8 @@ npm run dev
 
 Server will run on:
 
+Live Link:
+https://financialbe.onrender.com
 ```
 http://localhost:5000
 ```
