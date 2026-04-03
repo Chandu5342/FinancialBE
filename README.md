@@ -214,6 +214,75 @@ Swagger UI available at:
 ```
 http://localhost:5000/api-docs
 ```
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/8c76f7b0-de05-4773-b6df-d04df532c812" />
+
+---
+
+---
+
+## API Testing using Postman
+
+
+Register
+
+POST /api/auth/register
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/2cbacc42-979c-48cb-a273-e6ce1de8481f" />
+
+
+Login
+
+POST /api/auth/login
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/fd5d027c-0194-40aa-b6c2-ab1cef61957d" />
+
+
+Create Category (ADMIN)
+
+POST /api/categories
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/d57f175c-06db-48fe-bef8-c2b3ee017c03" />
+
+
+Get Categories
+
+GET /api/categories
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3001b916-cc22-4d67-8376-59d5100a3c9a" />
+
+
+Create Transaction (Analyst/Admin)
+
+POST /api/transactions
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/584f63c5-ce9d-4690-a739-3057dcc25f68" />
+
+
+Get Transactions
+
+GET:
+
+/api/transactions?page=1&limit=5&type=expense
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/c49bb6c6-4611-4f64-920c-59b1d021fbad" />
+
+Update Transaction
+
+PUT /api/transactions/:id
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/5bcf942c-f894-405f-8b5a-937c95e136e0" />
+
+
+Delete Transaction
+
+DELETE /api/transactions/:id
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/9cc339cd-4052-437d-bfdc-125c7a382a7d" />
+
+
+Summary
+
+GET /api/dashboard/summary
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/545bd476-4061-4b27-91eb-852dd00e64bb" />
+
+
+Trends
+
+GET /api/dashboard/trends
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/363147a6-5abe-433f-908c-1a142b1c82f8" />
+
 
 ---
 
