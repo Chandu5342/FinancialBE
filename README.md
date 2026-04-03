@@ -6,6 +6,16 @@ This project is a backend API for a Finance Dashboard system that supports role-
 
 ---
 
+---
+##  Live API
+
+Live URL:
+https://financialbe.onrender.com
+
+Swagger Documentation:
+https://financialbe.onrender.com/api-docs
+
+---
 ## Features
 
 ### User Authentication
