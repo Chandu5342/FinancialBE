@@ -8,6 +8,14 @@ This document provides details about all available API endpoints in the Finance 
 
 http://localhost:5000
 
+## Live API
+
+Base URL:
+https://financialbe.onrender.com
+
+Swagger Documentation:
+https://financialbe.onrender.com/api-docs
+
 ---
 
 ##  Authentication
