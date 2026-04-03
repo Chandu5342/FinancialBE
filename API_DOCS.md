@@ -80,7 +80,7 @@ Body:
 
 ```json
 {
-  "name": "admin",
+  "name": "admin user",
   "email": "admin@test.com",
   "password": "123456",
   "role": "admin"
