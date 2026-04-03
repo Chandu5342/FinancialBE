@@ -237,8 +237,3 @@ http://localhost:5000/api-docs
 
 ---
 
-##  Notes
-
-* Backend built with scalability and clarity in mind
-* Focus on clean architecture and maintainable code
-* Designed to simulate real-world financial backend systems
