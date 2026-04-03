@@ -80,8 +80,8 @@ Body:
 
 ```json
 {
-  "name": "Chandu",
-  "email": "chandu@gmail.com",
+  "name": "admin",
+  "email": "admin@test.com",
   "password": "123456",
   "role": "admin"
 }
@@ -98,7 +98,7 @@ Body:
 
 ```json
 {
-  "email": "chandu@test.com",
+  "email": "admin@test.com",
   "password": "123456"
 }
 ```
