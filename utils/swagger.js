@@ -5,7 +5,11 @@ const swaggerDocument = {
     version: '1.0.0',
     description: 'API documentation for Finance Dashboard Backend',
   },
+
   servers: [
+    {
+      url: 'https://financialbe.onrender.com', // 
+    },
     {
       url: 'http://localhost:5000',
     },
@@ -21,11 +25,19 @@ const swaggerDocument = {
     },
   },
 
+  //  Global Auth (applies to all routes)
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+
   paths: {
-    // AUTH
+    // ================= AUTH =================
     '/api/auth/register': {
       post: {
         summary: 'Register User',
+        security: [], //  no auth required
         requestBody: {
           required: true,
           content: {
@@ -40,7 +52,7 @@ const swaggerDocument = {
           },
         },
         responses: {
-          201: { description: 'User registered' },
+          201: { description: 'User registered successfully' },
         },
       },
     },
@@ -48,6 +60,7 @@ const swaggerDocument = {
     '/api/auth/login': {
       post: {
         summary: 'Login User',
+        security: [], //  no auth required
         requestBody: {
           required: true,
           content: {
@@ -60,23 +73,22 @@ const swaggerDocument = {
           },
         },
         responses: {
-          200: { description: 'Login successful' },
+          200: { description: 'Login successful (returns JWT token)' },
         },
       },
     },
 
-    //  CATEGORY
+    // ================= CATEGORY =================
     '/api/categories': {
       get: {
         summary: 'Get all categories',
-        security: [{ bearerAuth: [] }],
         responses: {
           200: { description: 'List of categories' },
         },
       },
+
       post: {
         summary: 'Create category (Admin only)',
-        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -94,18 +106,25 @@ const swaggerDocument = {
       },
     },
 
-    //  TRANSACTIONS
+    // ================= TRANSACTIONS =================
     '/api/transactions': {
       get: {
         summary: 'Get transactions with filters',
-        security: [{ bearerAuth: [] }],
+        parameters: [
+          { name: 'page', in: 'query', schema: { type: 'integer' } },
+          { name: 'limit', in: 'query', schema: { type: 'integer' } },
+          { name: 'type', in: 'query', schema: { type: 'string' } },
+          { name: 'categoryId', in: 'query', schema: { type: 'string' } },
+          { name: 'startDate', in: 'query', schema: { type: 'string', format: 'date' } },
+          { name: 'endDate', in: 'query', schema: { type: 'string', format: 'date' } },
+        ],
         responses: {
           200: { description: 'Transactions list' },
         },
       },
+
       post: {
         summary: 'Create transaction',
-        security: [{ bearerAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -126,11 +145,56 @@ const swaggerDocument = {
       },
     },
 
-    //  DASHBOARD
+    '/api/transactions/{id}': {
+      put: {
+        summary: 'Update transaction',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              example: {
+                amount: 600,
+                type: 'expense',
+                categoryId: 'CATEGORY_ID',
+                date: '2026-04-03',
+                notes: 'Updated Lunch',
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: 'Transaction updated' },
+        },
+      },
+
+      delete: {
+        summary: 'Delete transaction (Admin only)',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: { description: 'Transaction deleted' },
+        },
+      },
+    },
+
+    // ================= DASHBOARD =================
     '/api/dashboard/summary': {
       get: {
-        summary: 'Get dashboard summary',
-        security: [{ bearerAuth: [] }],
+        summary: 'Get dashboard summary (income, expense, balance)',
         responses: {
           200: { description: 'Summary data' },
         },
@@ -139,8 +203,7 @@ const swaggerDocument = {
 
     '/api/dashboard/trends': {
       get: {
-        summary: 'Get monthly trends',
-        security: [{ bearerAuth: [] }],
+        summary: 'Get monthly income/expense trends',
         responses: {
           200: { description: 'Trends data' },
         },
