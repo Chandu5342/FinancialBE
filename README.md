@@ -51,16 +51,52 @@ This project is a backend API for a Finance Dashboard system that supports role-
 
 ```
 backend/
-│── config/         # DB connection and configuration
-│── controllers/    # Business logic (API handlers)
-│── middleware/     # Auth, role-based access, validation, error handling
-│── models/         # Sequelize models
-│── routes/         # API route definitions
-│── validations/    # Zod schemas
-│── utils/          # JWT, Swagger setup
-│── app.js          # Express app setup
-│── server.js       # Entry point
-│── .env            # Environment variables
+│
+├── config/
+│   └── db.js                  # Sequelize DB connection setup
+│
+├── controllers/
+│   ├── authController.js      # Register, Login logic
+│   ├── categoryController.js  # Category CRUD
+│   ├── transactionController.js # Transaction CRUD + filters
+│   └── dashboardController.js # Summary + trends
+│
+├── middleware/
+│   ├── authMiddleware.js      # JWT verification
+│   ├── roleMiddleware.js      # Role-based access control
+│   ├── errorMiddleware.js     # Global error handler
+│   └── validateMiddleware.js  # Zod validation handler
+│
+├── models/
+│   ├── index.js               # Model associations
+│   ├── User.js                # User model
+│   ├── Category.js            # Category model
+│   └── Transaction.js         # Transaction model
+│
+├── routes/
+│   ├── authRoutes.js          # Auth routes
+│   ├── categoryRoutes.js      # Category routes
+│   ├── transactionRoutes.js   # Transaction routes
+│   └── dashboardRoutes.js     # Dashboard routes
+│
+├── validations/
+│   ├── authValidation.js      # Register/Login validation
+│   ├── categoryValidation.js  # Category validation
+│   └── transactionValidation.js # Transaction validation
+│
+├── utils/
+│   ├── generateToken.js       # JWT token generator
+│   └── swagger.js             # Swagger config
+│
+├── app.js                     # Express app setup (middlewares, routes)
+├── server.js                  # Entry point (DB connect + server start)
+│
+├── .env                       # Environment variables (NOT pushed)
+├── .gitignore                 # Ignore node_modules, .env
+├── package.json               # Dependencies and scripts
+├── package-lock.json          # Auto-generated
+│
+└── README.md                  # Project documentation
 ```
 
 ---
@@ -115,13 +151,13 @@ Authorization: Bearer <token>
 Create a `.env` file in the root directory:
 
 ```
-DB_HOST=your_host
+DB_HOST=######
 DB_PORT=5432
-DB_NAME=your_db_name
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
+DB_NAME=######
+DB_USER=#######
+DB_PASSWORD=#######
 PORT=5000
-JWT_SECRET=your_secret_key
+JWT_SECRET=#####
 ```
 
 ---
