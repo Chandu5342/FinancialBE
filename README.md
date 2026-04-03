@@ -223,7 +223,6 @@ http://localhost:5000/api-docs
 * Categories are shared globally
 * Authentication is handled using JWT tokens
 * Transactions are linked to users and categories
-* Soft delete may be enabled for transactions (if configured)
 
 ---
 
