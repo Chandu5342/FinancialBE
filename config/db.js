@@ -11,16 +11,16 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: false, // cleaner output
+    logging: false, 
   }
 );
 
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ PostgreSQL Connected Successfully');
+    console.log(' PostgreSQL connected successfully');
   } catch (error) {
-    console.error('❌ DB Connection Failed:', error.message);
+    console.error(' db connection failed:', error.message);
     process.exit(1);
   }
 };

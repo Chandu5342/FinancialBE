@@ -13,13 +13,13 @@ const startServer = async () => {
     await connectDB();
 
     await sequelize.sync({ alter: true }); // auto create tables
-    console.log('✅ Tables synced');
+    console.log('Tables synced');
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(` Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('❌ Server failed to start:', error.message);
+    console.error(' Server failed to start:', error.message);
   }
 };
 

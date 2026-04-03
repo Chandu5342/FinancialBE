@@ -3,6 +3,9 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './utils/swagger.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 const app = express();
 
 app.use(cors());
@@ -14,6 +17,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/transactions', transactionRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(errorHandler);
 
 

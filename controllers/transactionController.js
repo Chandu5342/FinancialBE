@@ -32,7 +32,7 @@ export const createTransaction = async (req, res) => {
 };
 
 
-// GET (with filtering + pagination 🔥)
+// GET ( filtering + pagination)
 export const getTransactions = async (req, res) => {
   try {
     const { type, categoryId, startDate, endDate, page = 1, limit = 5 } = req.query;

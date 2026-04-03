@@ -8,7 +8,7 @@ export const register = async (req, res) => {
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'user already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,11 +21,11 @@ export const register = async (req, res) => {
     });
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: 'user registered successfully',
       token: generateToken(user),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'server error' });
   }
 };
 
@@ -36,20 +36,20 @@ export const login = async (req, res) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ message: 'invalid credentials' });
     }
 
     res.json({
-      message: 'Login successful',
+      message: 'login successful',
       token: generateToken(user),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'server error' });
   }
 };

@@ -4,7 +4,7 @@ export const validate = (schema) => (req, res, next) => {
     next();
   } catch (err) {
     return res.status(400).json({
-      message: 'Validation Error',
+      message: 'validation Error',
       errors: err.errors,
     });
   }

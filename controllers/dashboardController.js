@@ -37,8 +37,7 @@ export const getDashboardSummary = async (req, res) => {
     });
 
     res.json({
-      totalIncome: totalIncome || 0,
-      totalExpense: totalExpense || 0,
+      totalIncome: totalIncome || 0,totalExpense: totalExpense || 0,
       netBalance: (totalIncome || 0) - (totalExpense || 0),
       categoryTotals,
       recentTransactions,
