@@ -1,65 +1,132 @@
 # Finance Dashboard Backend
 
-This repository is a Finance Dashboard backend API built with Node.js, Express, PostgreSQL (Sequelize), JWT authentication, and Swagger API docs.
+## Objective
+
+This project is a backend API for a Finance Dashboard system that supports role-based access control, financial data management, and analytical insights. It demonstrates backend architecture design, API structuring, data modeling, and access control mechanisms.
+
+---
 
 ## Features
 
-- User authentication
-  - Register (sign-up) and login with JWT
-- Role-based access control
-  - `admin`, `analyst` (as defined by `authorizeRoles` use)
-- Categories management
-  - Create category (admin only)
-  - List categories (all authenticated users)
-- Transactions management
-  - Create transaction (analyst, admin)
-  - Get transactions (authenticated users, with filtering by user+date)
-  - Update transaction (analyst, admin)
-  - Delete transaction (admin)
-- Dashboard metrics
-  - Summary and monthly trends (authenticated users)
-- Central error handling and request validation (zod)
+### User Authentication
 
-## Folder structure
+* Register (sign-up) and login with JWT
+* Secure password hashing using bcrypt
+
+### Role-Based Access Control
+
+* **Viewer**: Can view transactions and dashboard data
+* **Analyst**: Can create, update, and view transactions
+* **Admin**: Full access including user and category management
+
+###  Categories Management
+
+* Create category (admin only)
+* List categories (all authenticated users)
+
+###  Transactions Management
+
+* Create transaction (analyst, admin)
+* Get transactions (with filtering and pagination)
+* Update transaction (analyst, admin)
+* Delete transaction (admin)
+
+###  Dashboard Analytics
+
+* Total income, total expense, net balance
+* Category-wise totals
+* Recent transactions
+* Monthly trends
+
+###  Backend Features
+
+* Input validation using Zod
+* Centralized error handling
+* RESTful API design
+* Swagger API documentation
+
+---
+
+##  Folder Structure
 
 ```
 backend/
-│── config/         # DB connection and config
-│── controllers/    # Request handlers
-│── middleware/     # Auth, role middleware, validation, errors
+│── config/         # DB connection and configuration
+│── controllers/    # Business logic (API handlers)
+│── middleware/     # Auth, role-based access, validation, error handling
 │── models/         # Sequelize models
-│── routes/         # API routes
-│── utils/          # token generation, swagger setup
+│── routes/         # API route definitions
+│── validations/    # Zod schemas
+│── utils/          # JWT, Swagger setup
 │── app.js          # Express app setup
-│── server.js       # Server entrypoint
+│── server.js       # Entry point
 │── .env            # Environment variables
-``` 
+```
 
-## Tech Stack
+---
 
-- Node.js + Express
-- PostgreSQL via Sequelize
-- JWT Authentication
-- bcrypt for password hashing
-- Zod for validation
-- Swagger UI for API docs
-- nodemon for development
+##  Tech Stack
 
-## Environment variables
+* Node.js + Express
+* PostgreSQL (Supabase) with Sequelize ORM
+* JWT Authentication
+* bcrypt for password hashing
+* Zod for validation
+* Swagger UI for API documentation
+* nodemon for development
 
-Create a `.env` file in `backend/` with values like:
+---
+
+##  Database Design
+
+The system uses three main tables:
+
+* **Users**
+
+  * Stores user details, roles, and status
+
+* **Categories**
+
+  * Master table for income and expense categories
+
+* **Transactions**
+
+  * Stores financial records linked to users and categories
+
+### 🔗 Relationships
+
+* One User → Many Transactions
+* One Category → Many Transactions
+
+---
+
+##  Authentication
+
+Protected routes require a JWT token:
 
 ```
-DB_HOST=localhost
+Authorization: Bearer <token>
+```
+
+---
+
+##  Environment Variables
+
+Create a `.env` file in the root directory:
+
+```
+DB_HOST=your_host
 DB_PORT=5432
 DB_NAME=your_db_name
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 PORT=5000
-JWT_SECRET=secret
+JWT_SECRET=your_secret_key
 ```
 
-## Run locally
+---
+
+##  Run Locally
 
 ```bash
 git clone <your-repo-url>
@@ -68,46 +135,111 @@ npm install
 npm run dev
 ```
 
-Server will run on: `http://localhost:5000`
+Server will run on:
 
-## API Endpoints
+```
+http://localhost:5000
+```
+
+---
+
+## 📡 API Endpoints
 
 ### Auth
 
-- `POST /api/auth/register` - Register a new user
-  - body: `{ name, email, password, role, isActive }`
-- `POST /api/auth/login` - Login user
-  - body: `{ email, password }`
+* `POST /api/auth/register`
 
-### Categories
+  * body:
 
-- `POST /api/categories` - Add new category (admin only)
-  - header: `Authorization: Bearer <token>`
-  - body: `{ name }`
-- `GET /api/categories` - List categories (authenticated users)
+    ```json
+    {
+      "name": "Chandu",
+      "email": "chandu@test.com",
+      "password": "123456",
+      "role": "admin"
+    }
+    ```
+
+* `POST /api/auth/login`
+
+---
+
+###  Categories
+
+* `POST /api/categories` (Admin only)
+
+  * body:
+
+    ```json
+    {
+      "name": "Food",
+      "type": "expense"
+    }
+    ```
+
+* `GET /api/categories`
+
+---
 
 ### Transactions
 
-- `POST /api/transactions` - Create transaction (analyst, admin)
-  - body: `{ type: 'income'|'expense', amount, categoryId, date?, note? }`
-- `GET /api/transactions` - Get transactions (authenticated user)
-  - supports query params: `page`, `limit`, `startDate`, `endDate`, `type`, `category`, `search`
-- `PUT /api/transactions/:id` - Update transaction (analyst, admin)
-- `DELETE /api/transactions/:id` - Delete transaction (admin)
+* `POST /api/transactions`
 
-### Dashboard
+* `GET /api/transactions`
 
-- `GET /api/dashboard/summary` - Get cumulative income/expense summary
-- `GET /api/dashboard/trends` - Get monthly income/expense trends
+  * Query params:
 
-## API documentation
+    * `page`, `limit`
+    * `type`
+    * `categoryId`
+    * `startDate`, `endDate`
 
-Open `http://localhost:5000/api-docs` for Swagger UI.
+* `PUT /api/transactions/:id`
 
-## Notes
+* `DELETE /api/transactions/:id`
 
-- The backend uses PostgreSQL and the Sequelize ORM.
-- Role checks are enforced in `middleware/roleMiddleware.js`.
-- JWT auth is enforced in `middleware/authMiddleware.js`.
-- Validation rules are in `validations/*` with Zod schemas.
+---
 
+###  Dashboard
+
+* `GET /api/dashboard/summary`
+* `GET /api/dashboard/trends`
+
+---
+
+## API Documentation
+
+Swagger UI available at:
+
+```
+http://localhost:5000/api-docs
+```
+
+---
+
+## Assumptions
+
+* Each user manages only their own financial records
+* Categories are shared globally
+* Authentication is handled using JWT tokens
+* Transactions are linked to users and categories
+* Soft delete may be enabled for transactions (if configured)
+
+---
+
+##  Additional Features
+
+* JWT-based authentication
+* Role-based authorization middleware
+* Pagination and filtering support
+* Aggregated analytics APIs
+* Swagger documentation for easy testing
+* Clean and modular project structure
+
+---
+
+##  Notes
+
+* Backend built with scalability and clarity in mind
+* Focus on clean architecture and maintainable code
+* Designed to simulate real-world financial backend systems
